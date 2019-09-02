@@ -1,0 +1,21 @@
+[{
+  "id": 1,
+  "name": "super",
+  "email": "super@example.com",
+  "role": 4
+}, {
+  "id": 2,
+  "name": "admin",
+  "email": "admin@example.com",
+  "role": 3
+}, {
+  "id": 3,
+  "name": "assis",
+  "email": "assis@example.com",
+  "role": 2
+}, {
+  "id": 4,
+  "name": "user",
+  "email": "user@example.com",
+  "role": 1
+}]

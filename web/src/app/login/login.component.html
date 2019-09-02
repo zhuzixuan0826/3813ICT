@@ -1,0 +1,16 @@
+<div class="dashboard">
+  <h2>Dashboard Login</h2>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <label>
+        <input [(ngModel)]="username" name="username" matInput placeholder="Your Name Here" />
+      </label>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <label>
+        <input [(ngModel)]="email" matInput name="email" placeholder="Your Email Here" />
+      </label>
+    </mat-form-field>
+  </form>
+  <button mat-raised-button (click)="login()">Login</button>
+</div>

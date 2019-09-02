@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 100px;
+  flex-direction: row;
+
+  >div {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.tab-body {
+  flex-direction: column;
+}
+
+.tab-form {
+  padding: 100px;
+  display: flex;
+  width: 300px;
+  flex-direction: column;
+}
+
+.my-groups {
+  >div {
+    margin-right: 30px;
+    >p + p {
+      margin-left: 20px;
+    }
+  }
+  display: flex;
+  flex-direction: column;
+}
+
+.right-header {
+  align-items: center;
+}
+
+.blank {
+  padding-bottom: 20px;
+}
+
+.row {
+  padding: 0 100px;
+  height: 50px;
+  border-bottom: black 1px solid;
+  display: flex;
+  flex-direction: row;
+  >p {
+    width: 300px;
+  }
+}

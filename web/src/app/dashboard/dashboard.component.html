@@ -1,0 +1,145 @@
+<div class="header">
+  <div class="my-groups">
+    <div>
+      <p style="font-size: 30px">dashboard</p>
+    </div>
+    <div class="my-groups">
+      <p style="font-size: 18px"> my groups: </p>
+      <p *ngFor="let group of myGroups">
+        {{group.name}}
+      </p>
+    </div>
+  </div>
+  <div class="right-header">
+    <p>{{user.name}}</p>
+    <button (click)="logout()" mat-button color="warn">Logout</button>
+  </div>
+</div>
+<!-- show groups -->
+<mat-tab-group>
+  <!-- super admin  role-->
+  <mat-tab *ngIf="isSuperAdmin()" label="Manage Users">
+    <div *ngFor="let user of users" class="row">
+      <p>{{user.name}}</p>
+      <p>{{user.email}}</p>
+      <p>{{getRole(user.role)}}</p>
+      <button mat-raised-button color="warn" (click)="removeUser(user)">remove</button>
+      <button mat-raised-button color="accent" (click)="makeGroupAdmin(user)">make group admin</button>
+      <button mat-raised-button color="primary" (click)="makeSuperAdmin(user)">make super admin</button>
+    </div>
+  </mat-tab>
+  <!-- group admin role  -->
+  <mat-tab *ngIf="isGroupAdmin()" label="Create Group">
+    <form class="tab-form">
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="Group Name" [(ngModel)]="createGroupModal.name" name="name">
+        </label>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="createGroup()">Create Group</button>
+    </form>
+  </mat-tab>
+  <mat-tab *ngIf="isGroupAdmin()" label="Manage Groups">
+    <div *ngFor="let group of groups" class="row">
+      <p>{{group.name}}</p>
+      <button mat-raised-button color="warn" (click)="removeGroup(group)">remove</button>
+    </div>
+  </mat-tab>
+  <mat-tab *ngIf="isGroupAdmin()" label="Invite User">
+    <form class="tab-form">
+      <mat-label class="blank">Select Group</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let group of groups" [value]="group.name" (onSelectionChange)="onGroupSelectChange('inviteUserToChannel', group)">
+          {{group.name}}
+        </mat-option>
+      </mat-select>
+      <mat-label class="blank">Select Channel</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let channel of inviteUserToChannelModel.channels" [value]="channel.name" (onSelectionChange)="onChannelSelectChange('inviteUserToChannel', channel)">
+          {{channel.name}}
+        </mat-option>
+      </mat-select>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="username" [(ngModel)]="inviteUserToChannelModel.name" name="name">
+        </label>
+      </mat-form-field>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="email" [(ngModel)]="inviteUserToChannelModel.email" name="email">
+        </label>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="inviteUserToChannel()">Invite User To Channel</button>
+    </form>
+  </mat-tab>
+  <mat-tab *ngIf="isGroupAdmin()" label="Add Group Assis">
+    <div *ngFor="let user of users" class="row">
+      <p>{{user.name}}</p>
+      <p>{{user.email}}</p>
+      <button *ngIf="isNormalUser(user)" mat-raised-button color="accent" (click)="addUserToAssis(user)">add</button>
+    </div>
+  </mat-tab>
+  <!-- group assis -->
+  <mat-tab *ngIf="isGroupAssis()" label="Create Channel" style="padding: 100px">
+    <form class="tab-form">
+      <mat-label>Select Group</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let group of myGroups" [value]="group.name" (onSelectionChange)="onGroupSelectChange('createChannel', group)">
+          {{group.name}}
+        </mat-option>
+      </mat-select>
+      <mat-form-field>
+        <label>
+          <input matInput placeholder="Channel Name" [(ngModel)]="createChannelModal.name" name="name">
+        </label>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="createChannel()">Create Channel</button>
+    </form>
+  </mat-tab>
+  <mat-tab *ngIf="isGroupAssis()" label="Add User">
+    <form class="tab-form">
+      <mat-label class="blank">Select Group</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let group of myGroups" [value]="group.name" (onSelectionChange)="onGroupSelectChange('addUserToChannel', group)">
+          {{group.name}}
+        </mat-option>
+      </mat-select>
+      <mat-label class="blank">Select Channel</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let channel of addUserToChannelModal.addToChannelChannels" [value]="channel.name" (onSelectionChange)="onChannelSelectChange('addUserToChannel', channel)">
+          {{channel.name}}
+        </mat-option>
+      </mat-select>
+      <mat-label class="blank">Select User</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let user of addUserToChannelModal.addToChannelGroupUsers" [value]="user.name" (onSelectionChange)="onUserSelectChange('addUserToChannel', user)">
+          {{user.name}}
+        </mat-option>
+      </mat-select>
+      <button mat-raised-button color="primary" (click)="addUserToChannel()">Add User To Channel</button>
+    </form>
+ </mat-tab>
+  <mat-tab *ngIf="isGroupAssis()" label="Manage Users">
+    <form class="tab-form">
+      <mat-label class="blank">Select Group</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let group of myGroups" [value]="group.name" (onSelectionChange)="onGroupSelectChange('removeUserFromChannel', group)">
+          {{group.name}}
+        </mat-option>
+      </mat-select>
+      <mat-label class="blank">Select Channel</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let channel of removeUserToChannelModal.removeToChannelChannels" [value]="channel.name" (onSelectionChange)="onChannelSelectChange('removeUserFromChannel', channel)">
+          {{channel.name}}
+        </mat-option>
+      </mat-select>
+      <mat-label class="blank">Select User</mat-label>
+      <mat-select class="blank">
+        <mat-option *ngFor="let user of removeUserToChannelModal.removeToChannelGroupUsers" [value]="user.name" (onSelectionChange)="onUserSelectChange('removeUserFromChannel', user)">
+          {{user.name}}
+        </mat-option>
+      </mat-select>
+      <button mat-raised-button color="primary" (click)="removeFromChannel()">Remove User from Channel</button>
+    </form>
+ </mat-tab>
+</mat-tab-group>
